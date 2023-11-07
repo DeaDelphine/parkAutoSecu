@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -48,10 +49,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                SecurityContext securityContext =  SecurityContextHolder.createEmptyContext();
                //Récupérer le token de celui qui s'est authentifié
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                        //Je vais chercher les données de notre utiisateur connecté
+                        //Je vais chercher les données de notre utilisateur connecté et on insère nos données
                         userDetails, null, userDetails.getAuthorities()
                 );
+                // je récupère mon token et lui insère mes détails, je vais construire un objet à partir de notre requête
+                token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                // je rajoute mes informations d'authentification dans le contexte de sécurité
+                securityContext.setAuthentication(token);
+                //Je vais récupérer ce contexte de sécurtité  dans mon SecurityContextHolder qui est mon fil local (LocalThread)
+                SecurityContextHolder.setContext(securityContext);
             }
         }
+        // A partir de la ma requête est lancé et celle-ci est filtré par ma chaine de filtre et nous renvoi une réponse
+        filterChain.doFilter(request, response);
     }
 }
