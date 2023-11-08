@@ -1,5 +1,6 @@
 package com.assosetvous.assosetvous.repository;
 
+import com.assosetvous.assosetvous.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.assosetvous.assosetvous.entity.User;
@@ -13,4 +14,6 @@ public interface IUserRepository extends JpaRepository<User, Long>  {
 
     // Récupère l'id d'un utilisateur
     Optional<User> findByEmail(String userName);
+
+    User findByRole(Role role);
 }
