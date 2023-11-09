@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         jwt = autHeader.substring(7); // Car Bearer a 6 caractères + l'espace = 7
         userEmail = jwtService.extractUserName(jwt);
-        // On vérifie si l'adremme mail est valide
+        // On vérifie si l'adresse mail est valide
         if(StringUtils.isNotEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication()== null){
             UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
             //On vérifie que le token et les informations d'authentification sont valides

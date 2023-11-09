@@ -1,5 +1,6 @@
 package com.assosetvous.assosetvous.service.impl;
 
+import com.assosetvous.assosetvous.entity.User;
 import com.assosetvous.assosetvous.service.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -23,6 +26,14 @@ public class JWTServiceImpl implements JWTService {
               .signWith(getSigninKey(), SignatureAlgorithm.HS256)
               // créer le token et le serialize
               .compact();
+    }
+    public String generateRefreshToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return Jwts.builder().setClaims(extraClaims).setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis()+604800000)) // Valid for  7 days
+                .signWith(getSigninKey(), SignatureAlgorithm.HS256)
+                // créer le token et le serialize
+                .compact();
     }
 
     //Méthode qui permet d'extraire le token
@@ -60,6 +71,7 @@ public class JWTServiceImpl implements JWTService {
         return extractClaim(token, Claims::getExpiration)
                 .before(new Date());
     }
+
 
 
 }
