@@ -1,6 +1,7 @@
 package com.assosetvous.assosetvous.service.impl;
 
 import com.assosetvous.assosetvous.dto.JwtAuthenticationResponse;
+import com.assosetvous.assosetvous.dto.RefreshTokenRequest;
 import com.assosetvous.assosetvous.dto.SignInRequest;
 import com.assosetvous.assosetvous.dto.SignUpRequest;
 import com.assosetvous.assosetvous.entity.Role;
@@ -30,7 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     //pour se connecter j'ai aussi besoin de mon utilisateur
     // je vais donc chercher dans ma sous classe (SignUpRequest)  mes informations de mon utilisateur
-    public User signup(SignUpRequest signUpRequest){
+    public User signup(SignUpRequest signUpRequest) {
         User user = new User();
         user.setEmail(signUpRequest.getEmail());
         user.setFirstname(signUpRequest.getFirstName());
@@ -40,27 +41,47 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
         // On va ensuite aller sauvegarder nos informations dans notre base de donnée en utilisant notre repository
-        return  userRepository.save(user);
+        return userRepository.save(user);
     }
 
 
     // Je créer ma méthode de réponse à mon authentification
-    public JwtAuthenticationResponse signin(SignInRequest signInRequest){
+    public JwtAuthenticationResponse signin(SignInRequest signInRequest) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), passwordEncoder.encode(signInRequest.getPassword()))
+                new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword())
         );
-       var user = userRepository.findByEmail(signInRequest.getEmail())
-               .orElseThrow(
-                       () -> new IllegalArgumentException(
-                               "Invalid email or Password !"));
-       // je  vais générer un token à partir de mon utilisateur récupérer plus tôt
-       var jwt = jwtService.generateToken(user);
-       // je vais rafraichir mon token pour que l'utilisateur qui se reconnecte au bout d'un certain temps récupère un nouveau token
-       var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
-       JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-       jwtAuthenticationResponse.setToken(jwt);
-       jwtAuthenticationResponse.setRefreshToken(refreshToken);
-       return jwtAuthenticationResponse;
+        var user = userRepository.findByEmail(signInRequest.getEmail())
+                .orElseThrow(
+                        () -> new IllegalArgumentException(
+                                "Invalid email or Password !"));
+        // je  vais générer un token à partir de mon utilisateur récupérer plus tôt
+        var jwt = jwtService.generateToken(user);
+        // je vais rafraichir mon token pour que l'utilisateur qui se reconnecte au bout d'un certain temps récupère un nouveau token
+        var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
+        JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
+        jwtAuthenticationResponse.setToken(jwt);
+        jwtAuthenticationResponse.setRefreshToken(refreshToken);
+        return jwtAuthenticationResponse;
+    }
+
+    public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
+        // Je récupère les informations de 'utilisateur dans me userRepository
+        User user = userRepository.findByEmail(userEmail).orElseThrow();
+        // Si les information sont bien récupérer
+        if (jwtService.isTokenValid(refreshTokenRequest.getToken(), user)) {
+            var jwt = jwtService.generateToken(user);
+            // je génère une réponse
+            JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
+            // j'insère le token
+            jwtAuthenticationResponse.setToken(jwt);
+            //j'insère mon token raffraîchit
+            jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
+            // Je retourne ma réponse
+            return jwtAuthenticationResponse;
+        }
+        // sinon je retourne null
+        return null;
     }
 
 }

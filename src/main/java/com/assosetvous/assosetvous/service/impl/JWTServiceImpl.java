@@ -53,8 +53,8 @@ public class JWTServiceImpl implements JWTService {
     }
     // Creation d'une clé  pour la signature de notre token
     private Key getSigninKey(){
-        // Je créer un tableau de byte
-        byte[] key = Decoders.BASE64.decode("^vJbjUu$q3~Dnq{B=68Pv(n&%pTrx5UF)].%w0bBGtU.-n^,Yb^vJbjUu$q3~Dnq{B=68Pv(n&%pTrx5UF)].%w0bBGtU.-n^,Yb"); // Putting our secret key
+        // Je créer un tableau de byte cqui va contenir ma clé secrète
+        byte[] key = Decoders.BASE64.decode("413F4428472B4B6250655368566D5970337336763979244226452948404D6351"); // Putting our secret key
         return Keys.hmacShaKeyFor(key);
     }
 
