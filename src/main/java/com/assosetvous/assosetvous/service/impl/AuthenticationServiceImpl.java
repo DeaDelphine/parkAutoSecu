@@ -8,7 +8,11 @@ import com.assosetvous.assosetvous.entity.Role;
 import com.assosetvous.assosetvous.entity.User;
 import com.assosetvous.assosetvous.repository.IUserRepository;
 import com.assosetvous.assosetvous.service.AuthenticationService;
+import com.assosetvous.assosetvous.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +32,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     //Je fais appel à mon gestionnaire d'authentifdication
     private final AuthenticationManager authenticationManager;
     private final JWTServiceImpl jwtService;
+    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private EmailService emailService;
 
     //pour se connecter j'ai aussi besoin de mon utilisateur
     // je vais donc chercher dans ma sous classe (SignUpRequest)  mes informations de mon utilisateur
@@ -39,7 +46,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole(Role.USER);  // User is not allow to be an admin in register
         // on récupère notre mot de passe encoder depuis passwordEncoder avec la methode encode
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
-
+        LOGGER.info(" Votre mot de passe utilisateur  : "+ signUpRequest.getPassword());
+        emailService.sendConfirmRegister(signUpRequest.getEmail(), signUpRequest.getFirstName(), signUpRequest.getPassword());
         // On va ensuite aller sauvegarder nos informations dans notre base de donnée en utilisant notre repository
         return userRepository.save(user);
     }
