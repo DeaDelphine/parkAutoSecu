@@ -30,4 +30,9 @@ public class EmailService {
         String message = "Bonjour "+firstName+ " Merci d'avoir créer votre compte sur notre site Parkauto.\n\n Voici votre mot de passe : "+password+" ";
         sendEmail(email,subject, message);
     }
+    public void sendResetPassword(String email, String firstName, String link){
+        String subject = "Réinitialisation de votre mot de passe";
+        String message = "Bonjour "+firstName +",\n\n voici le lien pour réinitialiser votre mot de passe : "+link+" ";
+        sendEmail(email, subject, message);
+    }
 }

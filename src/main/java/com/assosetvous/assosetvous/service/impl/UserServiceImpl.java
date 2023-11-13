@@ -1,14 +1,20 @@
 package com.assosetvous.assosetvous.service.impl;
 
+import com.assosetvous.assosetvous.entity.User;
+import com.assosetvous.assosetvous.exception.EmailNotFoundException;
 import com.assosetvous.assosetvous.repository.IUserRepository;
 import com.assosetvous.assosetvous.service.EmailService;
 import com.assosetvous.assosetvous.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,11 +23,26 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EmailService emailService;
 
+    private Logger LOGGER = LoggerFactory.getLogger(getClass());
+
     @Autowired
     public UserServiceImpl(IUserRepository userRepository, EmailService emailService){
 
         this.userRepository = userRepository;
         this.emailService = emailService;
+    }
+
+    // Methode qui permet de réinitialiser le mot de passe de l'utilisateur
+    @Override
+    public void resetPassword(String email) throws EmailNotFoundException {
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if (user == null){
+            throw new EmailNotFoundException("No user Found by Email");
+        }
+        String link = "Url vers API";
+        LOGGER.info("lien "+link);
+        emailService.sendResetPassword(user.get().getEmail(), user.get().getFirstname(), link);
     }
     @Override
     public UserDetailsService userDetailsService(){
