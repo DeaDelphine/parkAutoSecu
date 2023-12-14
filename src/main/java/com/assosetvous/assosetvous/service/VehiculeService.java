@@ -29,6 +29,11 @@ public class VehiculeService {
 	public Vehicule getVehiculeByid(Long idvehi) {
 		return vehiculeRepository.findById(idvehi).get();
 	}
+
+	//put a Vehicule
+	public Vehicule updatedVehiculeById(Vehicule vehicule){
+		return vehiculeRepository.save(vehicule);
+	}
 	
 	//delete a Vehicule
 	public void deleteVehicule(Vehicule vehicule){

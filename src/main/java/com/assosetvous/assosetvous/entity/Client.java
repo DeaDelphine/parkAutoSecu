@@ -19,10 +19,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
+
 @Entity
 @Table(name="CLIENT")
 @Data
+@RequiredArgsConstructor
 public class Client implements Serializable {
 	
 	@Id
@@ -62,98 +63,7 @@ public class Client implements Serializable {
 	@JoinColumn(name="permis_id")
 	private PermisDeConduire permisdeconduire;
 
-	
-	
-	public Client(String nom, String prenom, String adresse, String cp, String ville, String pays, Vehicule vehicule,
-			List<Commande> commandeList, List<Location> locationList, List<Agence> agenceList,
-			PermisDeConduire permisdeconduire) {
-		super();
-		this.nom = nom;
-		this.prenom = prenom;
-		this.adresse = adresse;
-		this.cp = cp;
-		this.ville = ville;
-		this.pays = pays;
-		this.vehicule = vehicule;
-		this.commandeList = commandeList;
-		this.locationList = locationList;
-		this.agenceList = agenceList;
-		this.permisdeconduire = permisdeconduire;
-	}
 
-
-	public Client(Long id, String nom, String prenom, String adresse, String cp, String ville, String pays,
-			Vehicule vehicule, List<Commande> commandeList, List<Location> locationList, List<Agence> agenceList, PermisDeConduire permisdeconduire) {
-		super();
-		this.id = id;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.adresse = adresse;
-		this.cp = cp;
-		this.ville = ville;
-		this.pays = pays;
-		this.vehicule = vehicule;
-		this.commandeList = commandeList;
-		this.locationList = locationList;
-		this.agenceList = agenceList;
-		this.permisdeconduire = permisdeconduire;
-	}
-
-
-	public Client() {
-		super();
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
-	}
-
-	public void setAdresse(String adresse) {
-		this.adresse = adresse;
-	}
-
-	public void setCp(String cp) {
-		this.cp = cp;
-	}
-
-	public void setVille(String ville) {
-		this.ville = ville;
-	}
-
-	public void setPays(String pays) {
-		this.pays = pays;
-	}
-
-	public void setVehicule(Vehicule vehicule) {
-		this.vehicule = vehicule;
-	}
-
-
-	public void setCommandeList(List<Commande> commandeList) {
-		this.commandeList = commandeList;
-	}
-
-	public void setLocationList(List<Location> locationList) {
-		this.locationList = locationList;
-	}
-
-	public void setAgenceList(List<Agence> agenceList) {
-		this.agenceList = agenceList;
-	}
-
-
-	public void setPermisdeconduire(PermisDeConduire permisdeconduire) {
-		this.permisdeconduire = permisdeconduire;
-	}
 
 	
 }

@@ -41,8 +41,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public User signup(SignUpRequest signUpRequest) {
         User user = new User();
         user.setEmail(signUpRequest.getEmail());
-        user.setFirstname(signUpRequest.getFirstName());
-        user.setLastname(signUpRequest.getLastName());
+        user.setFirstName(signUpRequest.getFirstName());
+        user.setLastName(signUpRequest.getLastName());
         user.setRole(Role.USER);  // User is not allow to be an admin in register
         // on récupère notre mot de passe encoder depuis passwordEncoder avec la methode encode
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
@@ -68,6 +68,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
         JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
         jwtAuthenticationResponse.setToken(jwt);
+        jwtAuthenticationResponse.setEmail(user.getEmail());
+        jwtAuthenticationResponse.setLastName(user.getLastName());
+        jwtAuthenticationResponse.setFirstName(user.getFirstName());
         jwtAuthenticationResponse.setRefreshToken(refreshToken);
         return jwtAuthenticationResponse;
     }

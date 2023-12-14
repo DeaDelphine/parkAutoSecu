@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,6 +32,15 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.emailService = emailService;
     }
+    public List<User> getUsers(){
+        return userRepository.findAll();
+    }
+    public User getUserById(Long idUser) {
+        return userRepository.findById(idUser).get();
+    }
+    public void deleteUser(Long id){
+        userRepository.deleteById(id);
+    }
 
     // Methode qui permet de réinitialiser le mot de passe de l'utilisateur
     @Override
@@ -42,7 +52,7 @@ public class UserServiceImpl implements UserService {
         }
         String link = "Url vers API";
         LOGGER.info("lien "+link);
-        emailService.sendResetPassword(user.get().getEmail(), user.get().getFirstname(), link);
+        emailService.sendResetPassword(user.get().getEmail(), user.get().getFirstName(), link);
     }
     @Override
     public UserDetailsService userDetailsService(){

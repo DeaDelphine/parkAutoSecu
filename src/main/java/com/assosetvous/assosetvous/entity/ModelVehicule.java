@@ -9,9 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name="MODELEVEHICULE")
+@Data
+@RequiredArgsConstructor
 public class ModelVehicule {
 
 	@Id
@@ -25,59 +29,7 @@ public class ModelVehicule {
 	
 	@OneToMany(mappedBy = "modelvehicule")
 	private List<Vehicule> vehiculeList;
-	
-	
 
-	public ModelVehicule(String marque, double prixJournee, List<Vehicule> vehiculeList) {
-		super();
-		this.marque = marque;
-		this.prixJournee = prixJournee;
-		this.vehiculeList = vehiculeList;
-	}
-
-	public ModelVehicule(long id, String marque, double prixJournee, List<Vehicule> vehiculeList) {
-		super();
-		this.id = id;
-		this.marque = marque;
-		this.prixJournee = prixJournee;
-		this.vehiculeList = vehiculeList;
-	}
-
-	public ModelVehicule() {
-		super();
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getMarque() {
-		return marque;
-	}
-
-	public void setMarque(String marque) {
-		this.marque = marque;
-	}
-
-	public double getPrixJournee() {
-		return prixJournee;
-	}
-
-	public void setPrixJournee(double prixJournee) {
-		this.prixJournee = prixJournee;
-	}
-
-	public List<Vehicule> getVehiculeList() {
-		return vehiculeList;
-	}
-
-	public void setVehiculeList(List<Vehicule> vehiculeList) {
-		this.vehiculeList = vehiculeList;
-	}
 	
 	
 }

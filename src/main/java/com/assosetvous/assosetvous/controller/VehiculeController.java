@@ -5,14 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.assosetvous.assosetvous.entity.Vehicule;
 import com.assosetvous.assosetvous.service.VehiculeService;
@@ -26,6 +19,7 @@ public class VehiculeController {
 	
 	@PostMapping("/vehicule")
 	public Vehicule createVehicule(@Validated @RequestBody(required = false) Vehicule vehicule) {
+
 		return vehiculeService.saveVehicule(vehicule);
 	}
 	
@@ -44,6 +38,20 @@ public class VehiculeController {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok().body(vehicule1);
+	}
+
+	@PutMapping("/vehicules/{idVehicule}")
+	public ResponseEntity updatedVehiculeById(@Validated @RequestBody Vehicule vehicule, @PathVariable(name= "idVehicule") Long idVehicule){
+		if(idVehicule == null) {
+			return ResponseEntity.badRequest().body("Canot retreive vehicule with null id");
+		}
+		Vehicule vehicule1 = vehiculeService.getVehiculeByid(idVehicule);
+		vehicule1.setDescriptif(vehicule.getDescriptif());
+		vehicule1.setAnneeModel(vehicule.getAnneeModel());
+		vehicule1.setPrix(vehicule.getPrix());
+		vehicule1.setImageVehicule(vehicule.getImageVehicule());
+		vehiculeService.updatedVehiculeById(vehicule1);
+		return  ResponseEntity.ok().body(vehicule1);
 	}
 	
 	@DeleteMapping("/vehicules/{idVehicule}")

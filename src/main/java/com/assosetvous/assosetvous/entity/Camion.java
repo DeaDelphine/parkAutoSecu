@@ -4,10 +4,13 @@ import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name="CAMION")
-
+@Data
+@RequiredArgsConstructor
 
 public class Camion extends Vehicule{
 	
@@ -21,24 +24,5 @@ public class Camion extends Vehicule{
 		return "RRRRRRRRRRR!";
 	}
 	//Constructeur par défaut
-	public Camion() {
-		super();	
-	}
-
-	public Camion(int anneeModel, double prix, List<Location> locationList, List<Agence> agenceList,
-			ModelVehicule modelvehicule) {
-		super(anneeModel, prix, locationList, agenceList, modelvehicule);
-		// TODO Auto-generated constructor stub
-	}
-
-	public Camion(long id, int anneeModel, double prix, List<Location> locationList, List<Agence> agenceList,
-			ModelVehicule modelvehicule) {
-		super(id, anneeModel, prix, locationList, agenceList, modelvehicule);
-		// TODO Auto-generated constructor stub
-	}
-
-
-	
-
 
 }

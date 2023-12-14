@@ -10,9 +10,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table(name="DETAILSCMDE")
+@Data
+@RequiredArgsConstructor
 public class DetailsCmde {
 	
 	@Id
@@ -36,79 +40,6 @@ public class DetailsCmde {
 	private Commande commande;
 	
 
-	public DetailsCmde() {
-		super();
-	}
-	public DetailsCmde(Long id, int qteTotale, Date dateCmd, String description, double prix, double prixTotal,
-			Commande commande) {
-		super();
-		this.id = id;
-		this.qteTotale = qteTotale;
-		this.dateCmd = dateCmd;
-		this.description = description;
-		this.prix = prix;
-		this.prixTotal = prixTotal;
-		this.commande = commande;
-	}
-
-	public DetailsCmde(int qteTotale, Date dateCmd, String description, double prix, double prixTotal,
-			Commande commande) {
-		super();
-		this.qteTotale = qteTotale;
-		this.dateCmd = dateCmd;
-		this.description = description;
-		this.prix = prix;
-		this.prixTotal = prixTotal;
-		this.commande = commande;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public int getQteTotale() {
-		return qteTotale;
-	}
-
-	public void setQteTotale(int qteTotale) {
-		this.qteTotale = qteTotale;
-	}
-
-	public Date getDateCmd() {
-		return dateCmd;
-	}
-
-	public void setDateCmd(Date dateCmd) {
-		this.dateCmd = dateCmd;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public double getPrix() {
-		return prix;
-	}
-
-	public void setPrix(double prix) {
-		this.prix = prix;
-	}
-
-	public double getPrixTotal() {
-		return prixTotal;
-	}
-
-	public void setPrixTotal(double prixTotal) {
-		this.prixTotal = prixTotal;
-	}
 
 	
 }
